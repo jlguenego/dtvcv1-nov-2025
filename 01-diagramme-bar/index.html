@@ -132,10 +132,9 @@
 </head>
 <body>
   <div class="card">
-    <h1>Affluents de la Seine par longueur</h1>
+    <h1>Affluents de la Seine par longueur (km)</h1>
     <p>
-      Données Wikidata, longueur en kilomètres. Les affluents sont triés par longueur décroissante
-      et représentés par des barres horizontales.
+      Source: <a href="https://wikidata.org">Wikidata</a>. 
     </p>
 
     <div id="status" class="status">Chargement des données depuis Wikidata…</div>
@@ -219,7 +218,7 @@
 
           const value = document.createElement("span");
           value.className = "row-value";
-          value.textContent = Math.round(d.km) + " km";
+          value.textContent = Math.round(d.km);
 
           barContainer.appendChild(bar);
           row.appendChild(label);
