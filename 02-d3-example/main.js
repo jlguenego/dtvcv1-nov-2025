@@ -1,5 +1,8 @@
 console.log("Hello, Jean-Louis!");
 
+
+console.log('d3: ', d3);
+
 const recupererDonnees = async () => {
     const endpoint = "https://query.wikidata.org/sparql";
     const query = `
@@ -68,10 +71,39 @@ const afficheDiagramme = (data) => {
     }
 }
 
+const afficheDiagrammeWithD3 = (data) => {
+    const svg = d3.select("svg");
+    console.log('svg: ', svg);
+    const height = 40;
+    const gap = 10;
+    const width = +svg.attr("width") - 2*10
+    const ratio =  width / data[0].km; 
+
+    const groupes = svg.selectAll("g")
+        .data(data.slice(0,10))
+        .enter()
+        .append("g")
+        .attr("transform", (d,i) => `translate(0, ${10 + i * (height + gap)})`);
+
+    groupes.append("rect")
+        .attr("x", 10)
+        .attr("width", d => d.km * ratio)
+        .attr("height", height)
+        .attr("fill", d => 
+            d3.interpolateViridis(d.km / data[0].km)
+        );
+
+    groupes.append("text")
+        .attr("x", 10 + 10)
+        .attr("y", height / 2)
+        .attr("dominant-baseline", "middle")
+        .text(d => `${d.name} (${d.km} km)`);
+}
+
 const main = async () => {
     const data = await recupererDonnees();
     console.log('Données récupérées :', data);
-    afficheDiagramme(data)
+    afficheDiagrammeWithD3(data)
 }
 
 main();

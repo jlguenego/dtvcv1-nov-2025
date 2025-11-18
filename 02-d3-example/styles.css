@@ -3,7 +3,6 @@ svg {
 }
 
 rect {
-    fill: coral;
     stroke: darkred;
     stroke-width: 2;
 }
