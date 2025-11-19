@@ -1,10 +1,5 @@
 import { setupButtons } from "./buttons.js";
 
-console.log("Hello, Jean-Louis!");
-
-
-console.log('d3: ', d3);
-
 const recupererDonnees = async () => {
     const endpoint = "https://query.wikidata.org/sparql";
     const query = `
@@ -20,7 +15,10 @@ WHERE {
 ORDER BY DESC(?length)
     `;
 
-    const url = endpoint + "?query=" + encodeURIComponent(query);
+    
+    const queryString = "?query=" + encodeURIComponent(query);
+    console.log('queryString: ', queryString);
+    const url = endpoint + queryString;
     const response = await fetch(url, {
         headers: { "Accept": "application/sparql-results+json" }
     });
@@ -31,30 +29,32 @@ ORDER BY DESC(?length)
 
     const json = await response.json();
     console.log('json: ', json);
+    
 
     const data = json.results.bindings.map(b => ({
         name: b.riverLabel?.value || "(sans nom)",
         km: parseFloat(b.length.value),
         surfaceBassinVersant: parseFloat(b.bassinVersant.value)
     }));
-    console.log('data: ', data);
 
+    console.log('data: ', data);
     return data;
 }
+
 
 const afficheDiagramme = (data) => {
     const svgns = "http://www.w3.org/2000/svg";
 
     const svg = document.querySelector("svg");
-    console.log('svg: ', svg);
+    
     const height = 40;
     const gap = 10;
     const width = +svg.getAttribute("width") - 2*10;
     const ratio =  width / data[0].km; 
-    console.log('ratio: ', ratio);
+    
 
     for (let i = 0; i < 10; i++) {
-        console.log(`Iteration number: ${i}`);
+        
 
         // ajoute un rectangle SVG pour chaque itération
         const rect = document.createElementNS(svgns, "rect");
@@ -76,17 +76,17 @@ const afficheDiagramme = (data) => {
 }
 
 const afficheDiagrammeWithD3 = (data, type) => {
-    console.log('type: ', type);
+    
 
     const textMaxWidth = 70;
-    const kmTextWidth = 50;
+    const textWidth = 90;
     const svg = d3.select("svg");
-    console.log('svg: ', svg);
+    
     const height = 40;
     const gap = 10;
-    const maxBarWith = +svg.attr("width") - 2*10 - textMaxWidth - kmTextWidth;
+    const maxBarWith = +svg.attr("width") - 2*10 - textMaxWidth - textWidth;
     const ratio =  maxBarWith / data[0][type]; 
-    console.log('ratio: ', ratio);
+    
 
     const groupes = svg.selectAll("g")
         .data(data, d => d.name);
@@ -149,7 +149,7 @@ const afficheDiagrammeWithD3 = (data, type) => {
 
 const main = async () => {
     const data = await recupererDonnees();
-    console.log('Données récupérées :', data);
+    
     setupButtons(data, afficheDiagrammeWithD3);
     afficheDiagrammeWithD3(data.slice(0,10), "km");
 }
