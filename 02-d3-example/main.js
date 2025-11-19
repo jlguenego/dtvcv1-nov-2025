@@ -1,3 +1,5 @@
+import { setupButtons } from "./buttons.js";
+
 console.log("Hello, Jean-Louis!");
 
 
@@ -74,6 +76,7 @@ const afficheDiagramme = (data) => {
 }
 
 const afficheDiagrammeWithD3 = (data) => {
+
     const textMaxWidth = 70;
     const kmTextWidth = 50;
     const svg = d3.select("svg");
@@ -114,7 +117,8 @@ const afficheDiagrammeWithD3 = (data) => {
 const main = async () => {
     const data = await recupererDonnees();
     console.log('Données récupérées :', data);
-    afficheDiagrammeWithD3(data)
+    setupButtons(data, afficheDiagrammeWithD3);
+    afficheDiagrammeWithD3(data);
 }
 
 main();

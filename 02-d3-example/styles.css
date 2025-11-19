@@ -14,3 +14,12 @@ rect {
     stroke: darkred;
     stroke-width: 2;
 }
+
+div.command {
+    padding: 1em;
+
+    button {
+        padding: 0.5em 1em;
+        cursor: pointer;
+    }
+}
