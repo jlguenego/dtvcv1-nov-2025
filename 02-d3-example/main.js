@@ -79,12 +79,13 @@ const afficheDiagrammeWithD3 = (data, type) => {
   const maxBarWith = +svg.attr("width") - 2 * 10 - textMaxWidth - textWidth;
   const ratio = maxBarWith / data[0][type];
 
-  const groupes = svg.selectAll("g").data(data, (d) => d.id);
+  const groupes = svg.selectAll("g.bar-group").data(data, (d) => d.id);
 
   // Le groupe de ceux qui entrent (les enters)
   const groupesEnter = groupes
     .enter()
     .append("g")
+    .classed("bar-group", true)
     .attr("transform", (d, i) => `translate(0, ${10 + i * (height + gap)})`);
 
   groupesEnter
@@ -105,10 +106,18 @@ const afficheDiagrammeWithD3 = (data, type) => {
     .attr("dominant-baseline", "middle")
     .text((d) => `${d.name}`);
 
-  groupesEnter
+  const gValue = groupesEnter
+    .append("g")
+    .classed("value-group", true)
+    .attr(
+      "transform",
+      (d) => `translate(${d[type] * ratio + 10 + textMaxWidth + 10}, 0)`,
+    );
+
+  gValue
     .append("text")
     .classed("value", true)
-    .attr("x", (d) => d[type] * ratio + 10 + textMaxWidth + 10)
+    .attr("x", 0)
     .attr("y", height / 2)
     .attr("dominant-baseline", "middle")
     .text((d) => `${d[type]} ${type === "km" ? "km" : "km²"}`);
@@ -137,13 +146,21 @@ const afficheDiagrammeWithD3 = (data, type) => {
     .duration(750)
     .text((d) => `${d.name}`);
 
+  groupesUpdate
+    .select("g.value-group")
+    .transition()
+    .duration(750)
+    .attr(
+      "transform",
+      (d) => `translate(${d[type] * ratio + 10 + textMaxWidth + 10}, 0)`,
+    );
+
   const t = groupesUpdate.select("text.value");
 
   // Fade-out
   t.transition()
     .duration(375)
     .style("opacity", 0)
-    .text((d) => "")
     .on("end", () => {
       // Mise à jour de la valeur
       t.text((d) => `${d[type]} ${type === "km" ? "km" : "km²"}`);
@@ -152,7 +169,6 @@ const afficheDiagrammeWithD3 = (data, type) => {
       t.style("opacity", 0) // point de départ
         .transition()
         .duration(375)
-        .attr("x", (d) => d[type] * ratio + 10 + textMaxWidth + 10)
         .style("opacity", 1); // fin (complètement visible)
     });
 };
