@@ -30,6 +30,7 @@ ORDER BY DESC(?length)
   console.log("json: ", json);
 
   const data = json.results.bindings.map((b) => ({
+    id: b.river.value,
     name: b.riverLabel?.value || "(sans nom)",
     km: parseFloat(b.length.value),
     surfaceBassinVersant: parseFloat(b.bassinVersant.value),
@@ -78,8 +79,9 @@ const afficheDiagrammeWithD3 = (data, type) => {
   const maxBarWith = +svg.attr("width") - 2 * 10 - textMaxWidth - textWidth;
   const ratio = maxBarWith / data[0][type];
 
-  const groupes = svg.selectAll("g").data(data, (d) => d.name);
+  const groupes = svg.selectAll("g").data(data, (d) => d.id);
 
+  // Le groupe de ceux qui entrent (les enters)
   const groupesEnter = groupes
     .enter()
     .append("g")
@@ -109,9 +111,11 @@ const afficheDiagrammeWithD3 = (data, type) => {
     .attr("dominant-baseline", "middle")
     .text((d) => `${d[type]} ${type === "km" ? "km" : "km²"}`);
 
+  // Le groupe de ceux qui sortent (les exits)
   const groupeExit = groupes.exit();
   groupeExit.remove();
 
+  // Le groupe de ceux qui restent (les updates)
   const groupesUpdate = groupes;
   groupesUpdate
     .transition()
