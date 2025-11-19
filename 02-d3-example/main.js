@@ -99,6 +99,7 @@ const afficheDiagrammeWithD3 = (data, type) => {
 
   groupesEnter
     .append("text")
+    .classed("name", true)
     .attr("x", 10 + 10)
     .attr("y", height / 2)
     .attr("dominant-baseline", "middle")
@@ -106,6 +107,7 @@ const afficheDiagrammeWithD3 = (data, type) => {
 
   groupesEnter
     .append("text")
+    .classed("value", true)
     .attr("x", (d) => d[type] * ratio + 10 + textMaxWidth + 10)
     .attr("y", height / 2)
     .attr("dominant-baseline", "middle")
@@ -130,12 +132,12 @@ const afficheDiagrammeWithD3 = (data, type) => {
     .attr("fill", (d) => d3.interpolateViridis(d[type] / data[0][type]));
 
   groupesUpdate
-    .select("text:nth-of-type(1)")
+    .select("text.name")
     .transition()
     .duration(750)
     .text((d) => `${d.name}`);
 
-  const t = groupesUpdate.select("text:nth-of-type(2)");
+  const t = groupesUpdate.select("text.value");
 
   // Fade-out
   t.transition()
