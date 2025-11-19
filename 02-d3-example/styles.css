@@ -1,26 +1,25 @@
 body {
-    font-family: sans-serif;
+  font-family: sans-serif;
 }
 
 body {
-    font-family: "Roboto", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 svg {
-    background-color: antiquewhite;
+  background-color: antiquewhite;
 }
 
 rect {
-    stroke: darkred;
-    stroke-width: 2;
+  stroke: darkred;
+  stroke-width: 2;
 }
 
 div.command {
-    padding: 1em;
+  padding: 1em;
 
-    button {
-        padding: 0.5em 1em;
-        cursor: pointer;
-    }
+  button {
+    padding: 0.5em 1em;
+    cursor: pointer;
+  }
 }
-
