@@ -75,7 +75,8 @@ const afficheDiagramme = (data) => {
     }
 }
 
-const afficheDiagrammeWithD3 = (data) => {
+const afficheDiagrammeWithD3 = (data, type) => {
+    console.log('type: ', type);
 
     const textMaxWidth = 70;
     const kmTextWidth = 50;
@@ -84,41 +85,73 @@ const afficheDiagrammeWithD3 = (data) => {
     const height = 40;
     const gap = 10;
     const maxBarWith = +svg.attr("width") - 2*10 - textMaxWidth - kmTextWidth;
-    const ratio =  maxBarWith / data[0].km; 
+    const ratio =  maxBarWith / data[0][type]; 
+    console.log('ratio: ', ratio);
 
     const groupes = svg.selectAll("g")
-        .data(data.slice(0,10))
-        .enter()
+        .data(data, d => d.name);
+
+
+    const groupesEnter =  groupes.enter()
         .append("g")
         .attr("transform", (d,i) => `translate(0, ${10 + i * (height + gap)})`);
 
-    groupes.append("rect")
+    groupesEnter.append("rect")
         .attr("x", 10 + textMaxWidth)
-        .attr("width", d => d.km * ratio)
+        .attr("width", d => {
+            return d[type] * ratio;
+        })
         .attr("height", height)
         .attr("fill", "coral")
         .attr("fill", d => 
-            d3.interpolateViridis(d.km / data[0].km)
+            d3.interpolateViridis(d[type] / data[0][type])
         );
 
-    groupes.append("text")
+    groupesEnter.append("text")
         .attr("x", 10 + 10)
         .attr("y", height / 2)
         .attr("dominant-baseline", "middle")
         .text(d => `${d.name}`);
 
-    groupes.append("text")
-        .attr("x", d => d.km * ratio + 10 + textMaxWidth + 10)
+    groupesEnter.append("text")
+        .attr("x", d => d[type] * ratio + 10 + textMaxWidth + 10)
         .attr("y", height / 2)
         .attr("dominant-baseline", "middle")
-        .text(d => `${d.km}`);
+        .text(d => `${d[type]} ${type === "km" ? "km" : "km²"}`);
+
+    const groupeExit = groupes.exit()
+    groupeExit.remove();
+
+    const groupesUpdate = groupes;
+    groupesUpdate.transition().duration(750)
+    .attr("transform", (d,i) => `translate(0, ${10 + i * (height + gap)})`);
+
+
+    groupesUpdate.select("rect")
+        .transition()
+        .duration(750)
+        .attr("width", d => d[type] * ratio)
+        .attr("fill", d => 
+            d3.interpolateViridis(d[type] / data[0][type])
+        );
+
+    groupesUpdate.select("text:nth-of-type(1)")
+        .transition()
+        .duration(750)
+        .text(d => `${d.name}`);
+
+    groupesUpdate.select("text:nth-of-type(2)")
+        .transition()
+        .duration(750)
+        .attr("x", d => d[type] * ratio + 10 + textMaxWidth + 10)
+        .text(d => `${d[type]} ${type === "km" ? "km" : "km²"}`);
 }
 
 const main = async () => {
     const data = await recupererDonnees();
     console.log('Données récupérées :', data);
     setupButtons(data, afficheDiagrammeWithD3);
-    afficheDiagrammeWithD3(data);
+    afficheDiagrammeWithD3(data.slice(0,10), "km");
 }
 
 main();
