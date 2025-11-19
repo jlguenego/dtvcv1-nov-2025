@@ -1,14 +1,8 @@
 {
-  "name": "dtvcv1-nov-2025",
-  "version": "1.0.0",
-  "description": "Datavisualisation Exercices",
-  "scripts": {
-    "start": "npx serve"
-  },
-  "keywords": [],
-  "author": "Jean-Louis GUENEGO",
-  "license": "MIT",
-  "dependencies": {
-    "d3": "^7.9.0"
-  }
+    "name": "dtvcv1-nov-2025",
+    "version": "1.0.0",
+    "description": "Data Visualization Course - November 2025",
+    "dependencies": {
+        "d3": "^7.9.0"
+    }
 }

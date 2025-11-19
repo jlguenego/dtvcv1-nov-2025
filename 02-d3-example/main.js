@@ -89,9 +89,10 @@ const afficheDiagrammeWithD3 = (data) => {
         .attr("x", 10)
         .attr("width", d => d.km * ratio)
         .attr("height", height)
-        .attr("fill", d => 
-            d3.interpolateViridis(d.km / data[0].km)
-        );
+        .attr("fill", "coral");
+        // .attr("fill", d => 
+        //     d3.interpolateViridis(d.km / data[0].km)
+        // );
 
     groupes.append("text")
         .attr("x", 10 + 10)
