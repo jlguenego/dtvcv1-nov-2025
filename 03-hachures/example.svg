@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180" viewBox="0 0 300 180">
+
+    <defs>
+        <!-- Hachures pour le cercle : fines, diagonales à 45° -->
+        <pattern id="hatchCircle" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="10" stroke="black" stroke-width="1" />
+        </pattern>
+
+        <!-- Hachures pour le triangle : plus épaisses, diagonales à -45° -->
+        <pattern id="hatchTriangle" patternUnits="userSpaceOnUse" width="12" height="12" patternTransform="rotate(-45)">
+            <line x1="0" y1="0" x2="0" y2="12" stroke="black" stroke-width="2" />
+        </pattern>
+    </defs>
+
+    <!-- Cercle avec hachures fines -->
+    <circle cx="90" cy="90" r="60" fill="url(#hatchCircle)" stroke="black" stroke-width="2" />
+
+    <!-- Triangle avec hachures plus épaisses et orientation différente -->
+    <polygon points="190,30 270,150 110,150" fill="url(#hatchTriangle)" stroke="black" stroke-width="2" />
+
+    <!-- Cercle avec hachures fines -->
+    <circle cx="0" cy="0" r="60" fill="transparent" stroke="url(#hatchCircle)" stroke-width="20" />
+    <circle cx="0" cy="0" r="50" fill="transparent" stroke="black" stroke-width="2" />
+    <circle cx="0" cy="0" r="70" fill="transparent" stroke="black" stroke-width="2" />
+</svg>
